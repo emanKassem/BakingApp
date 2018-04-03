@@ -21,9 +21,11 @@ import com.bumptech.glide.Glide;
 import com.example.android.bakingapp.View.RecipeActivity;
 import com.example.android.bakingapp.View.RecipeAdapter;
 import com.example.android.bakingapp.model.Recipe;
+import com.example.android.bakingapp.model.Step;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
-        fetchPosts();
+        fetchRecipes();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -91,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchPosts() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, ENDPOINT, onPostsLoaded, onPostsError);
+    private void fetchRecipes() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ENDPOINT, onRecipesLoaded, onPostsError);
         requestQueue.add(stringRequest);
     }
-    private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
+    private final Response.Listener<String> onRecipesLoaded = new Response.Listener<String>() {
         @Override
-        public void onResponse(String response) {
+        public void onResponse(final String response) {
             recipes = Arrays.asList(gson.fromJson(response, Recipe[].class));
             for(Recipe recipe : recipes){
                 Log.i("result", recipe.getName());
@@ -106,7 +108,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(Recipe recipe) {
                     Intent i = new Intent(MainActivity.this, RecipeActivity.class);
-                    i.putExtra("Recipe", recipe);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name", recipe.getName());
+                    bundle.putParcelableArrayList("ingredients", recipe.getIngredients());
+                    bundle.putParcelableArrayList("steps", recipe.getSteps());
+                    i.putExtras(bundle);
                     startActivity(i);
 
                 }

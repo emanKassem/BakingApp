@@ -14,6 +14,9 @@ import com.example.android.bakingapp.model.Recipe;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by LENOVO on 31/03/2018.
  */
@@ -61,12 +64,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipteVie
 
     public class RecipteViewHolder extends RecyclerView.ViewHolder{
 
+        @BindView(R.id.recipe_image)
         ImageView recipeImageView;
+        @BindView(R.id.recipe_name)
          TextView recipeTextView;
         public RecipteViewHolder(View itemView) {
             super(itemView);
-            recipeImageView = itemView.findViewById(R.id.recipe_image);
-            recipeTextView = itemView.findViewById(R.id.recipe_name);
+            ButterKnife.bind(this, itemView);
         }
 
         public void bind(final Recipe recipe, final OnItemClickListener listener) {
