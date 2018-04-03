@@ -1,8 +1,10 @@
 package com.example.android.bakingapp.model;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -17,10 +19,10 @@ public class Recipe implements Parcelable{
     private String name;
     @SerializedName("ingredients")
     @Expose
-    private List<Ingredient> ingredients = null;
+    private ArrayList<Ingredient> ingredients = null;
     @SerializedName("steps")
     @Expose
-    private List<Step> steps = null;
+    private ArrayList<Step> steps = null;
     @SerializedName("servings")
     @Expose
     private Integer servings;
@@ -28,7 +30,7 @@ public class Recipe implements Parcelable{
     @Expose
     private String image;
 
-    public Recipe(Integer id, String name, List<Ingredient> ingredients, List<Step> steps, Integer servings, String image){
+    public Recipe(Integer id, String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, Integer servings, String image){
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
@@ -40,10 +42,12 @@ public class Recipe implements Parcelable{
     protected Recipe(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
-        this.ingredients = in.readArrayList(null);
-        this.steps = in.readArrayList(null);
         this.servings = in.readInt();
         this.image = in.readString();
+        Bundle bundle = in.readBundle(Ingredient.class.getClassLoader());
+        Bundle bundle1 = in.readBundle(Step.class.getClassLoader());
+        this.ingredients = bundle.getParcelableArrayList("ingredients");
+        this.steps = bundle1.getParcelableArrayList("steps");
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -74,19 +78,19 @@ public class Recipe implements Parcelable{
         this.name = name;
     }
 
-    public List<Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public List<Step> getSteps() {
+    public ArrayList<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(ArrayList<Step> steps) {
         this.steps = steps;
     }
 
@@ -115,9 +119,11 @@ public class Recipe implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(name);
-        parcel.writeList(ingredients);
-        parcel.writeList(steps);
         parcel.writeInt(servings);
         parcel.writeString(image);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("ingredients",ingredients);
+        bundle.putParcelableArrayList("steps", steps);
+        parcel.writeBundle(bundle);
     }
 }
