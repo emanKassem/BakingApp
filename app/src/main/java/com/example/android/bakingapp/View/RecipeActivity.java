@@ -29,14 +29,25 @@ public class RecipeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Bundle bundle = this.getIntent().getExtras();
         ArrayList<Ingredient> ingredients = bundle.getParcelableArrayList("ingredients");
-        ArrayList<Step> steps = bundle.getParcelableArrayList("steps");
+        final ArrayList<Step> steps = bundle.getParcelableArrayList("steps");
         RecyclerView.LayoutManager ingredientsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         ingredientsRecyclerView.setLayoutManager(ingredientsLayoutManager);
         IngredientAdapter ingredientAdapter = new IngredientAdapter(ingredients);
         ingredientsRecyclerView.setAdapter(ingredientAdapter);
         RecyclerView.LayoutManager StepsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         stepsRecyclerView.setLayoutManager(StepsLayoutManager);
-        StepAdapter stepAdapter = new StepAdapter(steps);
+        StepAdapter stepAdapter = new StepAdapter(steps, new StepAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Step step) {
+
+                Intent intent = new Intent(RecipeActivity.this, StepActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Step", step);
+                bundle.putParcelableArrayList("Steps", steps);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         stepsRecyclerView.setAdapter(stepAdapter);
 
     }

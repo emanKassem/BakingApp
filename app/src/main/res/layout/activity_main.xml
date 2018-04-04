@@ -49,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/backdrop_title"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/cardview_light_background"
                         android:textSize="@dimen/backdrop_title" />
                 </LinearLayout>
             </RelativeLayout>

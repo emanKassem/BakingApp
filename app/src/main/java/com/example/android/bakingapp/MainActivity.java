@@ -3,12 +3,15 @@ package com.example.android.bakingapp;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     AppBarLayout appBar;
     @BindView(R.id.backdrop)
     ImageView backdropImageView;
+    @BindView(R.id.main_content)
+    CoordinatorLayout coordinatorLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +129,16 @@ public class MainActivity extends AppCompatActivity {
     private final Response.ErrorListener onPostsError = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.e("PostActivity", error.toString());
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, "No internet connection", Snackbar.LENGTH_LONG)
+                    .setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            fetchRecipes();
+                        }
+                    });
+
+            snackbar.show();
         }
     };
 }
