@@ -1,9 +1,12 @@
 package com.example.android.bakingapp.View;
 
+import android.app.Fragment;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -25,7 +28,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepActivity extends AppCompatActivity {
+public class StepFragment extends Fragment{
 
     private SimpleExoPlayer player;
     @BindView(R.id.video_view)
@@ -45,16 +48,34 @@ public class StepActivity extends AppCompatActivity {
     int currentId;
     Step step;
     ArrayList<Step> steps;
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step);
-        ButterKnife.bind(this);
-        Bundle bundle = getIntent().getExtras();
-        step = bundle.getParcelable("Step");
-        steps = bundle.getParcelableArrayList("Steps");
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_step, container, false);
+        ButterKnife.bind(this, view);
+        step = getArguments().getParcelable("Step");
+        steps = getArguments().getParcelableArrayList("Steps");
+        nextImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentId < (steps.size() - 1)) {
+                    step = steps.get(currentId + 1);
+                    init();
+                }
+            }
+        });
+        previousImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentId > 0) {
+                    step = steps.get(currentId - 1);
+                    init();
+                }
+            }
+        });
         init();
-        }
+        return view;
+    }
 
     private void init() {
         description = step.getDescription();
@@ -110,7 +131,7 @@ public class StepActivity extends AppCompatActivity {
 
     private void initializePlayer(String url) {
         if (player == null) {
-            player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(this),
+            player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getActivity()),
                     new DefaultTrackSelector(), new DefaultLoadControl());
             playerView.setPlayer(player);
             player.setPlayWhenReady(playWhenReady);
@@ -135,21 +156,4 @@ public class StepActivity extends AppCompatActivity {
                 .createMediaSource(uri);
     }
 
-    public void onClick(View view) {
-        if(view.getId() == R.id.previousImageButton){
-            {
-                if(currentId>0){
-                    step = steps.get(currentId-1);
-                    init();
-                }
-            }
-
-        }else if(view.getId() == R.id.nextImageButton){
-            if(currentId <(steps.size()-1)){
-                step = steps.get(currentId+1);
-                init();
-            }
-
-        }
-    }
 }

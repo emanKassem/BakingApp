@@ -1,68 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="com.example.android.bakingapp.View.RecipeActivity">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:id="@+id/frame2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
-                    android:fontFamily="monospace"
-                    android:text="@string/ingredients"
-                    android:textColor="#ffff"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/ingredientsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="7dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorAccent"
-                    android:fontFamily="monospace"
-                    android:text="@string/steps"
-                    android:textColor="#ffff"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/stepsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
-</ScrollView>
+        android:visibility="gone"/>
+</LinearLayout>

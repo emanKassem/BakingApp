@@ -21,7 +21,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".View.RecipeActivity" />
-        <activity android:name=".View.StepActivity" />
 
         <receiver android:name=".BakingWidgetProvider">
             <intent-filter>
