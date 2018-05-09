@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Step;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -41,7 +42,8 @@ public class StepFragment extends Fragment{
     ImageButton previousImageButton;
     @BindView(R.id.stepNumberTextView)
     TextView stepNumberTextView;
-    private long playbackPosition;
+    private long playbackPosition, position = C.TIME_UNSET;
+    public static final String STATE = "videoState";
     private int currentWindow;
     private boolean playWhenReady = true;
     String video, thumbnail, description;
@@ -53,6 +55,9 @@ public class StepFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step, container, false);
         ButterKnife.bind(this, view);
+        if(savedInstanceState != null){
+            position = savedInstanceState.getLong(STATE, C.TIME_UNSET);
+        }
         step = getArguments().getParcelable("Step");
         steps = getArguments().getParcelableArrayList("Steps");
         nextImageButton.setOnClickListener(new View.OnClickListener() {
@@ -88,11 +93,9 @@ public class StepFragment extends Fragment{
 
     }
     void checkInitializePlayer(){
-        if(video.isEmpty() && thumbnail.isEmpty()){
+        if(video.isEmpty()){
             playerView.setVisibility(View.GONE);
-        }else if(thumbnail.isEmpty()){
-            initializePlayer(video);
-        }else {
+        } else {
             initializePlayer(thumbnail);
         }
     }
@@ -135,7 +138,11 @@ public class StepFragment extends Fragment{
                     new DefaultTrackSelector(), new DefaultLoadControl());
             playerView.setPlayer(player);
             player.setPlayWhenReady(playWhenReady);
-            player.seekTo(currentWindow, playbackPosition);
+            if(position == C.TIME_UNSET) {
+                player.seekTo(currentWindow, playbackPosition);
+            }else {
+                player.seekTo(currentWindow, position);
+            }
         }
         MediaSource mediaSource = buildMediaSource(Uri.parse(url));
         player.prepare(mediaSource, true, false);
@@ -156,4 +163,12 @@ public class StepFragment extends Fragment{
                 .createMediaSource(uri);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(player != null)
+            position = player.getCurrentPosition();
+        outState.putLong(STATE, position);
+
+    }
 }

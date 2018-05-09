@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Baking App</string>
-    <string name="backdrop_title">BAKING TIME</string>
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="step_decsription">Step description</string>

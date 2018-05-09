@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        initCollapsingToolbar();
         try{
             Glide.with(this).load(R.drawable.maxresdefault).into(backdropImageView);
         }catch (Exception e){
@@ -72,11 +72,16 @@ public class MainActivity extends AppCompatActivity {
         gsonBuilder.setDateFormat("M/d/yy hh:mm a");
         gson = gsonBuilder.create();
         fetchRecipes();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        if(getResources().getBoolean(R.bool.twoPaneMode)){
+            GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+            recyclerView.setLayoutManager(layoutManager);
+        }else {
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
+        }
     }
 
-    private void initCollapsingToolbar() {
+    /*private void initCollapsingToolbar() {
         collapsingToolbar.setTitle(" ");
         appBar.setExpanded(true);
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void fetchRecipes() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ENDPOINT, onRecipesLoaded, onPostsError);

@@ -3,7 +3,6 @@ package com.example.android.bakingapp.View;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Ingredient;
@@ -48,17 +48,31 @@ public class RecipeFragmet extends Fragment{
         StepAdapter stepAdapter = new StepAdapter(steps, new StepAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Step step) {
-
-                Fragment stepFragment = new StepFragment();
-                FragmentManager fragmentManager=getActivity().getFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Step", step);
-                bundle.putParcelableArrayList("Steps", steps);
-                stepFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.frame,stepFragment,"tag");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                if(!(getResources().getBoolean(R.bool.twoPaneMode))) {
+                    Fragment stepFragment = new StepFragment();
+                    FragmentManager fragmentManager = getActivity().getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("Step", step);
+                    bundle.putParcelableArrayList("Steps", steps);
+                    stepFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.frame, stepFragment, "tag");
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }else{
+                    FrameLayout frameLayout = getActivity().findViewById(R.id.frame2);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    Fragment stepFragment = new StepFragment();
+                    FragmentManager fragmentManager = getActivity().getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("Step", step);
+                    bundle.putParcelableArrayList("Steps", steps);
+                    stepFragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.frame2, stepFragment, "tag");
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
             }
         });
         stepsRecyclerView.setAdapter(stepAdapter);
