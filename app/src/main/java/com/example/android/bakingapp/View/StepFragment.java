@@ -7,9 +7,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Step;
 import com.google.android.exoplayer2.C;
@@ -42,6 +46,10 @@ public class StepFragment extends Fragment{
     ImageButton previousImageButton;
     @BindView(R.id.stepNumberTextView)
     TextView stepNumberTextView;
+    @BindView(R.id.thumbnailImageView)
+    ImageView thumbnailImageView;
+    @BindView(R.id.videoFrame)
+    FrameLayout videoFrame;
     private long playbackPosition, position = C.TIME_UNSET;
     public static final String STATE = "videoState";
     private int currentWindow;
@@ -89,14 +97,28 @@ public class StepFragment extends Fragment{
         stepDescription.setText(description);
         currentId = step.getId();
         stepNumberTextView.setText("Step "+currentId);
+
         checkInitializePlayer();
 
     }
     void checkInitializePlayer(){
         if(video.isEmpty()){
-            playerView.setVisibility(View.GONE);
+            if(!(thumbnail.isEmpty() || thumbnail.contains(".mp4"))){
+                try {
+                    Glide.with(getActivity()).load(thumbnail)
+                            .thumbnail(0.5f)
+                            .crossFade()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(thumbnailImageView);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }else {
+                videoFrame.setVisibility(View.GONE);
+            }
         } else {
-            initializePlayer(thumbnail);
+            videoFrame.setVisibility(View.VISIBLE);
+            initializePlayer(video);
         }
     }
 

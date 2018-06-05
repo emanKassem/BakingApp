@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(false);
+        }
         setSupportActionBar(toolbar);
 
         try{
@@ -98,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
         }
+        getIdlingResource();
     }
 
     @Override

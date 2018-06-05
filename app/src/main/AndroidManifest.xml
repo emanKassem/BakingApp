@@ -23,7 +23,8 @@
         <activity
             android:name=".View.RecipeActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"/>
 
         <receiver android:name=".BakingWidgetProvider">
             <intent-filter>

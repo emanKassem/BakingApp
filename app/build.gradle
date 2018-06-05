@@ -41,4 +41,5 @@ dependencies {
     }
     implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
     androidTestImplementation 'com.android.support.test:testing-support-lib:0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
 }
