@@ -1,5 +1,7 @@
 package com.example.android.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -109,6 +111,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         RecipeAdapter recipteAdapter = new RecipeAdapter(MainActivity.this, recipes, new RecipeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Recipe recipe) {
+                try {
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(MainActivity.this);
+                    int[] appWidgetIDs = appWidgetManager.getAppWidgetIds(new ComponentName(MainActivity.this,
+                            BakingWidgetProvider.class));
+                    BakingWidgetProvider.latestOpenedRecipe = recipe;
+                    BakingWidgetProvider.updateIngredientsWidget(MainActivity.this, appWidgetManager, appWidgetIDs);
+                }catch (Exception e){
+
+                }
                 Intent i = new Intent(MainActivity.this, RecipeActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("name", recipe.getName());
